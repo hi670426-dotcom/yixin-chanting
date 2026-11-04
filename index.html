@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一心唱題</title>
+<style>
+body{
+background:#1B4332;
+color:white;
+font-family:sans-serif;
+te1xt-align:center;
+padding:30px;
+}
+button{
+width:180px;
+height:180px;
+border-radius:50%;
+font-size:36px;
+border:none;
+background:#40916C;
+color:white;
+}
+.card{
+background:white;
+color:#1B4332;
+border-radius:20px;
+padding:20px;
+margin:20px;
+}
+</style>
+</head>
+<body>
+
+<h1>🌿 一心唱題</h1>
+
+<h2 id="date"></h2>
+
+<button onclick="addTime()">+10</button>
+
+<div class="card">
+<h3>今日累積</h3>
+<h1 id="today">0</h1>
+分鐘
+</div>
+
+<script>
+
+let todayDate=new Date().toLocaleDateString();
+
+document.getElementById("date").innerHTML=todayDate;
+
+let data=JSON.parse(localStorage.getItem('chant'))||{};
+
+if(!data[todayDate]){
+data[todayDate]=0;
+}
+
+function addTime(){
+data[todayDate]+=10;
+localStorage.setItem('chant',JSON.stringify(data));
+render();
+}
+
+function render(){
+document.getElementById("today").innerHTML=data[todayDate];
+}
+
+render();
+
+</script>
+
+</body>
+</html>

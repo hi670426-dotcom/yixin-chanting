@@ -32,7 +32,9 @@ margin:20px;
 </head>
 <body>
 
+<div style="font-size:90px">🦫</div>
 <h1>🌿 一心唱題</h1>
+
 
 <h2 id="date"></h2>
 
@@ -43,6 +45,18 @@ margin:20px;
 <h1 id="today">0</h1>
 分鐘
 </div>
+
+<div class="card">
+<h3>總累積</h3>
+<h1 id="total">0</h1>
+分鐘
+</div>
+
+<div class="card">
+<h3>💬 勉勵語</h3>
+<p id="quote">持續，就是力量。</p>
+</div>
+
 
 <script>
 
@@ -55,12 +69,33 @@ let data=JSON.parse(localStorage.getItem('chant'))||{};
 if(!data[todayDate]){
 data[todayDate]=0;
 }
+let quotes=[
+"持續，就是力量。",
+"慢慢來，也是在前進。",
+"卡皮巴拉為你加油♡",
+"日日精進，福慧增長。",
+"南無妙法蓮華經。",
+"今天也很棒。"
+];
 
-function addTime(){
-data[todayDate]+=10;
-localStorage.setItem('chant',JSON.stringify(data));
-render();
+function render(){
+
+document.getElementById("today").innerHTML =
+data[todayDate] || 0;
+
+let total = 0;
+
+for(let d in data){
+total += data[d];
 }
+
+document.getElementById("total").innerHTML =
+total;
+
+document.getElementById("quote").innerHTML =
+quotes[Math.floor(Math.random()*quotes.length)];
+}
+
 
 function render(){
 document.getElementById("today").innerHTML=data[todayDate];

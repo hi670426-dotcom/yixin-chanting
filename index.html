@@ -1,104 +1,409 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>一心唱題</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🌿 一心唱題</title>
+
 <style>
+:root{
+--dark:#1B4332;
+--green:#2D6A4F;
+--light:#40916C;
+--cream:#F8F5EC;
+--gold:#D4A373;
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:"Microsoft JhengHei",sans-serif;
+}
+
 body{
-background:#1B4332;
+background:var(--dark);
 color:white;
-font-family:sans-serif;
-te1xt-align:center;
-padding:30px;
-}
-button{
-width:180px;
-height:180px;
-border-radius:50%;
-font-size:36px;
-border:none;
-background:#40916C;
-color:white;
-}
-.card{
-background:white;
-color:#1B4332;
-border-radius:20px;
 padding:20px;
-margin:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+.header{
+text-align:center;
+margin-bottom:20px;
+}
+
+.capy{
+font-size:110px;
+animation:float 3s infinite ease-in-out;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+100%{transform:translateY(0);}
+}
+
+.title{
+font-size:36px;
+margin-top:10px;
+}
+
+.subtitle{
+opacity:.85;
+margin-top:8px;
+}
+
+.card{
+background:var(--cream);
+color:var(--dark);
+border-radius:25px;
+padding:20px;
+margin-top:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.25);
+}
+
+.big-btn{
+width:220px;
+height:220px;
+border:none;
+border-radius:50%;
+background:var(--light);
+color:white;
+font-size:40px;
+font-weight:bold;
+cursor:pointer;
+display:block;
+margin:20px auto;
+box-shadow:0 10px 20px rgba(0,0,0,.3);
+}
+
+.big-btn:hover{
+transform:scale(1.05);
+}
+
+.stat{
+font-size:32px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.quote{
+text-align:center;
+font-size:20px;
+line-height:1.8;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:12px;
+}
+
+.small-card{
+background:white;
+padding:15px;
+border-radius:18px;
+text-align:center;
+}
+
+.small-card h4{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.small-card div{
+font-size:24px;
+font-weight:bold;
+color:var(--green);
+}
+
+.history{
+max-height:250px;
+overflow:auto;
+padding-top:10px;
+}
+
+.history-item{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+.footer{
+text-align:center;
+margin-top:25px;
+opacity:.8;
+}
+
+select{
+width:100%;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+font-size:16px;
 }
 </style>
+
 </head>
+
 <body>
 
-<div style="font-size:90px">🦫</div>
-<h1>🌿 一心唱題</h1>
+<div class="container">
 
+<div class="header">
+<div class="capy">🦫</div>
+<div class="title">🌿 一心唱題</div>
+<div class="subtitle">
+南無妙法蓮華經
+</div>
+</div>
 
-<h2 id="date"></h2>
+<div class="card" style="text-align:center;">
+<h3 id="todayDate"></h3>
 
-<button onclick="addTime()">+10</button>
+<button class="big-btn" onclick="addTime()">
++10
+</button>
 
-<div class="card">
-<h3>今日累積</h3>
-<h1 id="today">0</h1>
-分鐘
+<div>每次增加 10 分鐘</div>
 </div>
 
 <div class="card">
-<h3>總累積</h3>
-<h1 id="total">0</h1>
-分鐘
+<div class="quote" id="quote">
+持續，就是力量。
+</div>
 </div>
 
 <div class="card">
-<h3>💬 勉勵語</h3>
-<p id="quote">持續，就是力量。</p>
+
+<h2>📊 唱題統計</h2>
+
+<div class="grid">
+
+<div class="small-card">
+<h4>今日</h4>
+<div id="todayTotal">0</div>
 </div>
 
+<div class="small-card">
+<h4>本週</h4>
+<div id="weekTotal">0</div>
+</div>
+
+<div class="small-card">
+<h4>本月</h4>
+<div id="monthTotal">0</div>
+</div>
+
+<div class="small-card">
+<h4>總累積</h4>
+<div id="allTotal">0</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🔥 連續唱題天數</h2>
+
+<div class="stat" id="streak">
+0 天
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📅 查看歷史記錄</h2>
+
+<select id="historySelect" onchange="showHistory()">
+</select>
+
+<div class="history" id="historyView"></div>
+
+</div>
+
+<div class="footer">
+🐹 卡皮巴拉陪你每日精進
+</div>
+
+</div>
 
 <script>
 
-let todayDate=new Date().toLocaleDateString();
-
-document.getElementById("date").innerHTML=todayDate;
-
-let data=JSON.parse(localStorage.getItem('chant'))||{};
-
-if(!data[todayDate]){
-data[todayDate]=0;
-}
-let quotes=[
+const quotes = [
 "持續，就是力量。",
-"慢慢來，也是在前進。",
-"卡皮巴拉為你加油♡",
+"今天也很棒。",
+"一聲唱題，一份安心。",
 "日日精進，福慧增長。",
+"慢慢來，也是在前進。",
 "南無妙法蓮華經。",
-"今天也很棒。"
+"卡皮巴拉為你加油 ♡",
+"每一次唱題，都是光明的種子。"
 ];
 
+let data =
+JSON.parse(localStorage.getItem("chantData")) || {};
+
+const today =
+new Date().toISOString().split("T")[0];
+
+document.getElementById("todayDate").innerHTML =
+"📅 " + today;
+
+if(!data[today]){
+data[today]=0;
+}
+
+function saveData(){
+localStorage.setItem(
+"chantData",
+JSON.stringify(data)
+);
+}
+
+function addTime(){
+
+data[today]+=10;
+
+saveData();
+
+document.getElementById("quote").innerHTML=
+quotes[Math.floor(Math.random()*quotes.length)];
+
+render();
+}
+
 function render(){
 
-document.getElementById("today").innerHTML =
-data[todayDate] || 0;
+document.getElementById("todayTotal").innerHTML =
+data[today];
 
-let total = 0;
+let total=0;
+let month=0;
+let week=0;
+
+const now = new Date();
 
 for(let d in data){
+
 total += data[d];
+
+let dateObj = new Date(d);
+
+if(
+dateObj.getMonth()===now.getMonth() &&
+dateObj.getFullYear()===now.getFullYear()
+){
+month += data[d];
 }
 
-document.getElementById("total").innerHTML =
+let diff =
+(now - dateObj) / 86400000;
+
+if(diff <= 7){
+week += data[d];
+}
+}
+
+document.getElementById("allTotal").innerHTML =
 total;
 
-document.getElementById("quote").innerHTML =
-quotes[Math.floor(Math.random()*quotes.length)];
+document.getElementById("monthTotal").innerHTML =
+month;
+
+document.getElementById("weekTotal").innerHTML =
+week;
+
+calculateStreak();
+
+renderHistoryList();
 }
 
+function calculateStreak(){
 
-function render(){
-document.getElementById("today").innerHTML=data[todayDate];
+let streak=0;
+
+let currentDate =
+new Date();
+
+while(true){
+
+let key =
+currentDate.toISOString().split("T")[0];
+
+if(data[key] && data[key] > 0){
+
+streak++;
+
+currentDate.setDate(
+currentDate.getDate()-1
+);
+
+}else{
+break;
+}
+}
+
+document.getElementById("streak").innerHTML =
+streak + " 天";
+}
+
+function renderHistoryList(){
+
+let select =
+document.getElementById("historySelect");
+
+select.innerHTML="";
+
+let dates =
+Object.keys(data)
+.sort()
+.reverse();
+
+dates.forEach(date=>{
+
+let option =
+document.createElement("option");
+
+option.value=date;
+option.text=date;
+
+select.appendChild(option);
+
+});
+
+showHistory();
+}
+
+function showHistory(){
+
+let date =
+document.getElementById("historySelect").value;
+
+let view =
+document.getElementById("historyView");
+
+if(!date){
+view.innerHTML="";
+return;
+}
+
+view.innerHTML=
+`
+<div class="history-item">
+日期：${date}<br>
+唱題時間：${data[date]} 分鐘
+</div>
+`;
 }
 
 render();
